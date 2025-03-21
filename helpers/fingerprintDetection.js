@@ -121,6 +121,7 @@
       },
     });
   };
+
   // CANVAS FINGERPRINTING
   // The canvas element text is written with fillText or strokeText methods.
   interceptFunctionCall(CanvasRenderingContext2D, "fillText");
@@ -137,14 +138,6 @@
   // TODO: check after inspecting canvas images whether we need to filter
   // out "device class fingerprinting" attempts a la Picasso
 
-  // WEBRTC FINGERPRINTING
-  // The script calls createDataChannel or createOffer methods of the WebRTC peer connection.
-  interceptFunctionCall(RTCPeerConnection, "createDataChannel");
-  interceptFunctionCall(RTCPeerConnection, "createOffer");
-  // The script calls onicecandidate or localDescription methods of the WebRTC peer connection.
-  interceptPropAccess(RTCPeerConnection, "onicecandidate");
-  interceptPropAccess(RTCPeerConnection, "localDescription");
-
   // CANVAS FONT FINGERPRINTING
   // The script sets the font property on a canvas element to more than 20 different times.
   interceptPropAccess(CanvasRenderingContext2D, "font");
@@ -159,4 +152,17 @@
   interceptPropAccess(BaseAudioContext, "destination");
   interceptFunctionCall(OfflineAudioContext, "startRendering");
   interceptPropAccess(OfflineAudioContext, "oncomplete");
+
+  // WEBRTC FINGERPRINTING
+  // The script calls createDataChannel or createOffer methods of the WebRTC peer connection.
+  interceptFunctionCall(RTCPeerConnection, "createDataChannel");
+  interceptFunctionCall(RTCPeerConnection, "createOffer");
+
+  // The script calls onicecandidate or localDescription methods of the WebRTC peer connection.
+  interceptPropAccess(RTCPeerConnection, "onicecandidate");
+  interceptPropAccess(RTCPeerConnection, "localDescription");
+
+  // From here on we extended the intercepts to extensively crawl WebRTC usage
+  interceptFunctionCall(RTCPeerConnection, "setRemoteDescription");
+  interceptFunctionCall(RTCPeerConnection, "setLocalDescription");
 })();
