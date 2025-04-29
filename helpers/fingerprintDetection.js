@@ -153,16 +153,46 @@
   interceptFunctionCall(OfflineAudioContext, "startRendering");
   interceptPropAccess(OfflineAudioContext, "oncomplete");
 
+
   // WEBRTC FINGERPRINTING
   // The script calls createDataChannel or createOffer methods of the WebRTC peer connection.
   interceptFunctionCall(RTCPeerConnection, "createDataChannel");
   interceptFunctionCall(RTCPeerConnection, "createOffer");
 
   // The script calls onicecandidate or localDescription methods of the WebRTC peer connection.
-  interceptPropAccess(RTCPeerConnection, "onicecandidate");
-  interceptPropAccess(RTCPeerConnection, "localDescription");
+  interceptPropAccess(RTCPeerConnection, "onicecandidate"); // Not sure if we can remove this yet TODO
+  // interceptPropAccess(RTCPeerConnection, "localDescription"); // Removed because setLocalDesc is more interesting
 
   // From here on we extended the intercepts to extensively crawl WebRTC usage
-  interceptFunctionCall(RTCPeerConnection, "setRemoteDescription");
-  interceptFunctionCall(RTCPeerConnection, "setLocalDescription");
+  interceptFunctionCall(RTCPeerConnection, "setLocalDescription"); // FB showed to use this to exfiltrate data
+  interceptFunctionCall(RTCPeerConnection, "setRemoteDescription"); // Interesting in the same way
+  interceptFunctionCall(RTCPeerConnection, "addIceCandidate"); // Promising! Adds candidate which is a string normally containing information
+  interceptFunctionCall(RTCPeerConnection, "createAnswer"); // Promising? Returns a promise containing SDP & type, also has unused options argument
+  interceptFunctionCall(RTCPeerConnection, "setConfiguration"); // Could be promising because the configuration is shared (?) and can contain a lot of strings TODO also add the constructor then!
+  interceptFunctionCall(RTCPeerConnection, "setIdentityProvider"); // Sets strings. In particular username can be interesting
+
+  interceptFunctionCall(RTCDataChannel, "send");
+
+  interceptFunctionCall(RTCRtpSender, "setParameters"); // Might be interesting because strings are set. In particular rid
+
+  // interceptPropAccess(RTCDataChannel, "label"); Pure getter
+  // interceptPropAccess(RTCDataChannel, "protocol"); Pure getter
+  // interceptPropAccess(RTCDataChannel, "readyState"); Pure getter
+  // interceptPropAccess(RTCPeerConnection, "iceGatheringState"); Pure getter
+  // interceptPropAccess(RTCPeerConnection, "remoteDescription"); Pure getter
+  // interceptPropAccess(RTCPeerConnection, "sctp"); Pure getter
+  // interceptPropAccess(RTCPeerConnection, "signalingState"); Pure getter
+  // interceptFunctionCall(RTCPeerConnection, "addStream"); // DEPRECATED MediaStream object contains ID which is string, but string cannot be set manually
+  // interceptFunctionCall(RTCPeerConnection, "addTrack"); // MediaStreamTrack contains more strings, but idem
+  // interceptFunctionCall(RTCPeerConnection, "addTransceiver"); // Similar to addTrack
+  // interceptFunctionCall(RTCPeerConnection, "createDTMFSender"); // Not needed according to Gunes
+  // interceptFunctionCall(RTCPeerConnection, "getStats"); // Selector parameter with mediastreamtrack, but decided not to look for those
+  // interceptFunctionCall(RTCPeerConnection, "removeStream"); // Idem
+  // interceptFunctionCall(RTCPeerConnection, "removeTrack"); // Idem
+
+
+  // interceptFunctionCall(RTCPeerConnection, "restartIce"); // Can request ICE restarts in which candidates are shared, but we're only interested in the sharing itself
+  // interceptPropAccess(RTCIceCandidate, "candidate"); Pure getter
+  // interceptPropAccess(RTCPeerConnectionIceEvent, "candidate"); Pure getter
+  // interceptPropAccess(RTCSessionDescription, "sdp"); Pure getter
 })();
