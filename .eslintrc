@@ -1,11 +1,11 @@
-module.exports = {
+{
     "env": {
         "node": true,
         "es6": true,
         "mocha": true
     },
-    plugins: [
-        'mocha',
+    "plugins": [
+        "mocha"
     ],
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -329,4 +329,4 @@ module.exports = {
             "never"
         ]
     }
-};
+}
