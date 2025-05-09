@@ -121,43 +121,43 @@
       },
     });
   };
-
-  // CANVAS FINGERPRINTING
-  // The canvas element text is written with fillText or strokeText methods.
-  interceptFunctionCall(CanvasRenderingContext2D, "fillText");
-  interceptFunctionCall(CanvasRenderingContext2D, "strokeText");
-  // The style is applied with fillStyle or strokeStyle properties.
-  interceptPropAccess(CanvasRenderingContext2D, "fillStyle");
-  interceptPropAccess(CanvasRenderingContext2D, "strokeStyle");
-  // The script calls toDataURL method to extract the image.
-  interceptFunctionCall(HTMLCanvasElement, "toDataURL");
-  // The script does not call save, restore or addEventListener methods on the canvas element
-  interceptFunctionCall(CanvasRenderingContext2D, "save");
-  interceptFunctionCall(CanvasRenderingContext2D, "restore");
-  interceptFunctionCall(CanvasRenderingContext2D, "addEventListener");
-  // TODO: check after inspecting canvas images whether we need to filter
-  // out "device class fingerprinting" attempts a la Picasso
-
-  // CANVAS FONT FINGERPRINTING
-  // The script sets the font property on a canvas element to more than 20 different times.
-  interceptPropAccess(CanvasRenderingContext2D, "font");
-  // The script calls the measureText method of the rendering context more than 20 times.
-  interceptFunctionCall(CanvasRenderingContext2D, "measureText");
-  interceptFunctionCall(CanvasRenderingContext2D, "isPointInPath");
-
-  // AUDIOCONTEXT FINGERPRINTING
-  // The script calls any of the createOscillator, createDynamicsCompressor, destination, startRendering, oncomplete method of the audio context.
-  interceptFunctionCall(OfflineAudioContext, "createOscillator");
-  interceptFunctionCall(OfflineAudioContext, "createDynamicsCompressor");
-  interceptPropAccess(BaseAudioContext, "destination");
-  interceptFunctionCall(OfflineAudioContext, "startRendering");
-  interceptPropAccess(OfflineAudioContext, "oncomplete");
+  //
+  // // CANVAS FINGERPRINTING
+  // // The canvas element text is written with fillText or strokeText methods.
+  // interceptFunctionCall(CanvasRenderingContext2D, "fillText");
+  // interceptFunctionCall(CanvasRenderingContext2D, "strokeText");
+  // // The style is applied with fillStyle or strokeStyle properties.
+  // interceptPropAccess(CanvasRenderingContext2D, "fillStyle");
+  // interceptPropAccess(CanvasRenderingContext2D, "strokeStyle");
+  // // The script calls toDataURL method to extract the image.
+  // interceptFunctionCall(HTMLCanvasElement, "toDataURL");
+  // // The script does not call save, restore or addEventListener methods on the canvas element
+  // interceptFunctionCall(CanvasRenderingContext2D, "save");
+  // interceptFunctionCall(CanvasRenderingContext2D, "restore");
+  // interceptFunctionCall(CanvasRenderingContext2D, "addEventListener");
+  // // TODO: check after inspecting canvas images whether we need to filter
+  // // out "device class fingerprinting" attempts a la Picasso
+  //
+  // // CANVAS FONT FINGERPRINTING
+  // // The script sets the font property on a canvas element to more than 20 different times.
+  // interceptPropAccess(CanvasRenderingContext2D, "font");
+  // // The script calls the measureText method of the rendering context more than 20 times.
+  // interceptFunctionCall(CanvasRenderingContext2D, "measureText");
+  // interceptFunctionCall(CanvasRenderingContext2D, "isPointInPath");
+  //
+  // // AUDIOCONTEXT FINGERPRINTING
+  // // The script calls any of the createOscillator, createDynamicsCompressor, destination, startRendering, oncomplete method of the audio context.
+  // interceptFunctionCall(OfflineAudioContext, "createOscillator");
+  // interceptFunctionCall(OfflineAudioContext, "createDynamicsCompressor");
+  // interceptPropAccess(BaseAudioContext, "destination");
+  // interceptFunctionCall(OfflineAudioContext, "startRendering");
+  // interceptPropAccess(OfflineAudioContext, "oncomplete");
 
 
   // WEBRTC FINGERPRINTING
   // The script calls createDataChannel or createOffer methods of the WebRTC peer connection.
-  interceptFunctionCall(RTCPeerConnection, "createDataChannel");
-  interceptFunctionCall(RTCPeerConnection, "createOffer");
+  interceptFunctionCall(RTCPeerConnection, "createDataChannel"); // Label parameter can contain string
+  interceptFunctionCall(RTCPeerConnection, "createOffer"); // Returns promise with "sdp" field; a string
 
   // The script calls onicecandidate or localDescription methods of the WebRTC peer connection.
   interceptPropAccess(RTCPeerConnection, "onicecandidate"); // Not sure if we can remove this yet TODO
@@ -169,7 +169,7 @@
   interceptFunctionCall(RTCPeerConnection, "addIceCandidate"); // Promising! Adds candidate which is a string normally containing information
   interceptFunctionCall(RTCPeerConnection, "createAnswer"); // Promising? Returns a promise containing SDP & type, also has unused options argument
   interceptFunctionCall(RTCPeerConnection, "setConfiguration"); // Could be promising because the configuration is shared (?) and can contain a lot of strings TODO also add the constructor then!
-  interceptFunctionCall(RTCPeerConnection, "setIdentityProvider"); // Sets strings. In particular username can be interesting
+  // interceptFunctionCall(RTCPeerConnection, "setIdentityProvider"); // Sets strings. In particular username can be interesting TODO chrome does not support, remove?
 
   interceptFunctionCall(RTCDataChannel, "send");
 

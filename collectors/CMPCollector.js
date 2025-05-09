@@ -232,7 +232,7 @@ class CMPCollector extends BaseCollector {
                         pageUtils.takeScreenshot(
                             page, this._outputPath, this._urlHash, 'after_autoconsent_action',
                             '_cmp1', this.log, false
-                        );
+                        ).catch((e) => this.log(`Browser context closed before 2nd screenshot`));
                     }, WAIT_TIME_BEFORE_POST_CMP_ACTION_SCREENSHOT);
                 }
             }
