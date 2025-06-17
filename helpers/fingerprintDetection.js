@@ -160,7 +160,7 @@
   interceptFunctionCall(RTCPeerConnection, "createOffer"); // Returns promise with "sdp" field; a string
 
   // The script calls onicecandidate or localDescription methods of the WebRTC peer connection.
-  interceptPropAccess(RTCPeerConnection, "onicecandidate"); // Not sure if we can remove this yet TODO
+  interceptPropAccess(RTCPeerConnection, "onicecandidate"); // Not sure if we can remove this yet
   // interceptPropAccess(RTCPeerConnection, "localDescription"); // Removed because setLocalDesc is more interesting
 
   // From here on we extended the intercepts to extensively crawl WebRTC usage
@@ -168,13 +168,13 @@
   interceptFunctionCall(RTCPeerConnection, "setRemoteDescription"); // Interesting in the same way
   interceptFunctionCall(RTCPeerConnection, "addIceCandidate"); // Promising! Adds candidate which is a string normally containing information
   interceptFunctionCall(RTCPeerConnection, "createAnswer"); // Promising? Returns a promise containing SDP & type, also has unused options argument
-  interceptFunctionCall(RTCPeerConnection, "setConfiguration"); // Could be promising because the configuration is shared (?) and can contain a lot of strings TODO also add the constructor then!
-  // interceptFunctionCall(RTCPeerConnection, "setIdentityProvider"); // Sets strings. In particular username can be interesting TODO chrome does not support, remove?
+  interceptFunctionCall(RTCPeerConnection, "setConfiguration"); // Could be promising because the configuration is shared (?) and can contain a lot of strings
 
-  interceptFunctionCall(RTCDataChannel, "send");
+  interceptFunctionCall(RTCDataChannel, "send"); // Has payload
 
   interceptFunctionCall(RTCRtpSender, "setParameters"); // Might be interesting because strings are set. In particular rid
 
+  // interceptFunctionCall(RTCPeerConnection, "setIdentityProvider"); // Sets strings. In particular username can be interesting. Chrome does not support though
   // interceptPropAccess(RTCDataChannel, "label"); Pure getter
   // interceptPropAccess(RTCDataChannel, "protocol"); Pure getter
   // interceptPropAccess(RTCDataChannel, "readyState"); Pure getter

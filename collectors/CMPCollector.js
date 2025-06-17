@@ -234,6 +234,7 @@ class CMPCollector extends BaseCollector {
                             '_cmp1', this.log, false
                         ).catch((e) => this.log(`${e} (Browser context closed before 2nd screenshot?)`));
                     }, WAIT_TIME_BEFORE_POST_CMP_ACTION_SCREENSHOT);
+                    // TODO Deze lijkt in tegenstelling tot de screenshot fix (subl) geen crash te geven.Ga na wat het verschil is tov oude versie voor in scriptie
                 }
             }
             break;
