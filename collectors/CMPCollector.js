@@ -346,6 +346,7 @@ class CMPCollector extends BaseCollector {
         /**
          * @type {string[]}
          */
+        await new Promise(r => setTimeout(r, 2500));
         const foundPatterns = [];
         const foundSnippets = [];
         const pages = await this.context.pages();

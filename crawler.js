@@ -127,6 +127,12 @@ async function getSiteData(context, url, {
         if (target.type() === 'page' && pageTargetCreated) {
             let newPage = await target.page();
             let adCollector = collectors.find(collector => collector.id() === 'ads');
+
+            if (!adCollector) {
+                log(chalk.red('❌ Ad collector not found, cannot attach listener to new page.'));
+                return;
+            }
+
             try {
                 // eslint-disable-next-line no-await-in-loop
                 await adCollector.addListener(newPage, url, outputPath, urlHash, context);
